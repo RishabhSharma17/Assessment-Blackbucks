@@ -10,6 +10,24 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchMe } from "./features/auth/authSlice";
 import ProjectDetails from "./pages/Manager/ProjectDetails";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import type { RootState } from "./app/store";
+
+function RootRedirect() {
+  const user = useSelector((s: RootState) => s.auth.user);
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (user.role === "ADMIN")
+    return <Navigate to="/admin/users" replace />;
+
+  if (user.role === "MANAGER")
+    return <Navigate to="/manager/projects" replace />;
+
+  return <Navigate to="/user/tasks" replace />;
+}
+
 
 export default function App() {
   const dispatch = useDispatch<any>();
@@ -20,6 +38,7 @@ export default function App() {
 
   return (
     <Routes>
+      <Route path="/" element={<RootRedirect />} />
       <Route path="/login" element={<Login />} />
 
       <Route element={<DashboardLayout />}>
