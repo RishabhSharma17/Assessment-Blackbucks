@@ -11,8 +11,12 @@ export const login = async (req: Request, res: Response) => {
 
   const result = await db
     .select({
-      user: users,
-      role: roles,
+      userId: users.id,
+      userName: users.name,
+      userEmail: users.email,
+      userPassword: users.password,
+      roleId: roles.id,
+      roleName: roles.name,
     })
     .from(users)
     .leftJoin(roles, eq(users.roleId, roles.id))
@@ -21,34 +25,31 @@ export const login = async (req: Request, res: Response) => {
   const row = result[0];
 
   if (!row) {
-    return res.status(400).json({
-      message: "Invalid Credentials",
-    });
+    return res.status(400).json({ message: "Invalid Credentials" });
   }
 
-  const { user, role } = row;
-
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, row.userPassword);
 
   if (!isMatch) {
-    return res.status(400).json({
-      message: "Invalid credentials",
-    });
+    return res.status(400).json({ message: "Invalid credentials" });
   }
 
-  const token = generateToken(user.id, role?.name ?? "USER");
+  const token = generateToken(row.userId, row.roleName ?? "USER");
 
   res.cookie("token", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: false,
   });
-
+  
   const safeUser = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: role?.name ?? "USER",
+    id: row.userId,
+    name: row.userName,
+    email: row.userEmail,
+    role: {
+      id: row.roleId,
+      name: row.roleName,
+    },
   };
 
   res.json({
@@ -56,6 +57,7 @@ export const login = async (req: Request, res: Response) => {
     user: safeUser,
   });
 };
+
 
 export const logout = async (_: Request, res: Response) => {
   res.clearCookie("token");
