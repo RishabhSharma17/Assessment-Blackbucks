@@ -1,0 +1,27 @@
+import { NextFunction, Request, Response } from "express";
+import jwt from 'jsonwebtoken';
+
+export interface Authrequest extends Request {
+    user?: {userId:number, role:string};
+}
+
+export const authenticate = (req:Authrequest, res:Response, next:NextFunction) => {
+    const token = req.cookies.token;
+
+    if(!token){
+        return res.status(401).json({"message":"Not Authenticated"});
+    }
+
+    try {
+        const decode = jwt.verify(token, process.env.JWT_SECRET!) as {
+            userId: number;
+            role: string;
+        }
+        
+        req.user = decode;
+
+        next();
+    } catch (error) {
+        return res.status(401).json({ "message":"Invalid Token" });
+    }
+}
