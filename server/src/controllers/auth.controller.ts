@@ -38,8 +38,8 @@ export const login = async (req: Request, res: Response) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "none",
+    secure: true,
   });
   
   const safeUser = {
