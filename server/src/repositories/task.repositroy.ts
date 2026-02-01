@@ -72,26 +72,20 @@ export const findTasksByProjectAndUserRepo = async (userId: number) => {
 };
 
 export const findTasksByProjectRepo = async (projectId: number) => {
-  const result = await db
+  return await db
     .select({
-      task: tasks,
-      assignee: users,
+      id: tasks.id,
+      title: tasks.title,
+      description: tasks.description,
+      status: tasks.status,
+      assignedToId: users.id,
+      assignedToName: users.name,
     })
     .from(tasks)
     .leftJoin(users, eq(users.id, tasks.assignedTo))
     .where(eq(tasks.projectId, projectId));
-
-  return result.map((row) => ({
-    ...row.task,
-    assignee: row.assignee
-      ? {
-          id: row.assignee.id,
-          name: row.assignee.name,
-          email: row.assignee.email,
-        }
-      : null,
-  }));
 };
+
 
 export const findTaskByIdRepo = async (taskId: number) => {
   const result = await db

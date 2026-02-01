@@ -8,11 +8,9 @@ import { updateUserSchema, userSchema } from "../types/user.schema";
 
 const userRouter = Router();
 
-userRouter.use(authenticate,authorize(['ADMIN']));
-
 userRouter.get('/',asyncHandler(getAllUser));
-userRouter.post('/',validate(userSchema),asyncHandler(createUser));
-userRouter.put('/:id',validate(updateUserSchema),asyncHandler(updateUser));
-userRouter.delete('/:id',asyncHandler(deleteUser));
+userRouter.post('/',authenticate,authorize(['ADMIN']),validate(userSchema),asyncHandler(createUser));
+userRouter.put('/:id',authenticate,authorize(['ADMIN']),validate(updateUserSchema),asyncHandler(updateUser));
+userRouter.delete('/:id',authenticate,authorize(['ADMIN']),asyncHandler(deleteUser));
 
 export default userRouter;

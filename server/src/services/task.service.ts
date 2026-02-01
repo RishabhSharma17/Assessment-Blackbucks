@@ -8,9 +8,6 @@ export const createTaskService = async (body: any,projectId: number,managerId: n
   const project = await findProjectByIdAndManagerRepo(projectId,managerId);
   if(!project) throw new Error("Not your project");
 
-  const member = await findProjectMemberRepo(projectId,assignedTo);
-  if(!member)throw new Error("User is not member of this project.");
-
   return createTaskRepo({title,description,projectId,assignedTo});
 };
 

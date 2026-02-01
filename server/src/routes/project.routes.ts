@@ -7,6 +7,7 @@ import {
   updateProject,
   deleteProject,
   addMemberToProject,
+  getMyProjects,
 } from "../controllers/project.controller";
 import {
   addMemberSchema,
@@ -27,7 +28,7 @@ const projectRouter = Router();
 projectRouter.use(authenticate, authorize(["MANAGER"]));
 
 // Project
-projectRouter.get("/my", asyncHandler(getAllProjects));
+projectRouter.get("/", asyncHandler(getMyProjects));
 projectRouter.post("/",validate(createProjectSchema),asyncHandler(createProject));
 projectRouter.put("/:id",asyncHandler(updateProject));
 projectRouter.delete("/:id",asyncHandler(deleteProject));

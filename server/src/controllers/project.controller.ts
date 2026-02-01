@@ -6,6 +6,7 @@ import {
   addMemberToProjectService,
   updateProjectService,
   deleteProjectService,
+  getMyProjectsManager,
 } from "../services/project.service";
 
 export const getAllProjects = async (req: Authrequest,res: Response) => {
@@ -14,6 +15,13 @@ export const getAllProjects = async (req: Authrequest,res: Response) => {
     );
     res.status(200).json(projects);
 };
+
+export const getMyProjects = async(req: Authrequest,res: Response) => {
+    const projects = await getMyProjectsManager(
+        req.user!.userId
+    );
+    res.status(200).json(projects);
+}
 
 export const createProject = async (req: Authrequest,res: Response) => {
     const project = await createProjectService(

@@ -20,6 +20,17 @@ export const findProjectsByManagerRepo = async (managerId: number) => {
   return groupProjectRows(rows);
 };
 
+export const findProjectsofManagerRepo = async (managerId: number) => {
+  return await db
+    .select({
+      id: projects.id,
+      name: projects.name,
+      description: projects.description,
+    })
+    .from(projects)
+    .where(eq(projects.createdBy, managerId));
+};
+
 export const createProjectRepo = async (data: {
   name: string;
   description?: string;

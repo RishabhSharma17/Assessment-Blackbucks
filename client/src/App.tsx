@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import DashboardLayout from "./layouts/DashboardLayout";
+import { ProtectedRoute } from './routes/ProptectedRoute'
+import AdminUsers from "./pages/Admin/AdminUsers";
+import AdminProjects from "./pages/Admin/AdminProjects";
+import ManagerProjects from "./pages/Manager/ManagerProjects";
+import UserTasks from "./pages/User/UserTask";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchMe } from "./features/auth/authSlice";
+import ProjectDetails from "./pages/Manager/ProjectDetails";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    dispatch(fetchMe());
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Routes>
+      <Route path="/login" element={<Login />} />
 
-export default App
+      <Route element={<DashboardLayout />}>
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/projects"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AdminProjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/manager/projects"
+          element={
+            <ProtectedRoute roles={["MANAGER"]}>
+              <ManagerProjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/manager/projects/:id"
+          element={
+            <ProtectedRoute roles={["MANAGER"]}>
+              <ProjectDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/user/tasks"
+          element={
+            <ProtectedRoute roles={["USER"]}>
+              <UserTasks />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+    </Routes>
+  );
+}

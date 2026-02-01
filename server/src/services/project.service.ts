@@ -5,11 +5,16 @@ import {
   addMemberRepo,
   updateProjectRepo,
   deleteProjectRepo,
+  findProjectsofManagerRepo,
 } from "../repositories/project.repository";
 
 export const getAllProjectsService = (managerId: number) => {
     return findProjectsByManagerRepo(managerId);
 };
+
+export const getMyProjectsManager = (managerId: number) => {
+    return findProjectsofManagerRepo(managerId);
+}
 
 export const createProjectService = (body: any,managerId: number) => {
     const { name, description } = body;

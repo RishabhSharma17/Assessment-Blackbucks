@@ -11,6 +11,6 @@ const taskRouter = Router();
 taskRouter.use(authenticate);
 
 taskRouter.put("/:taskId/status",validate(updateTaskStatusSchema),asyncHandler(updateTaskStatus));
-taskRouter.get("/my",authorize(["USER"]),asyncHandler(getMyTasks));
+taskRouter.get("/",authorize(["USER"]),asyncHandler(getMyTasks));
 
 export default taskRouter;
