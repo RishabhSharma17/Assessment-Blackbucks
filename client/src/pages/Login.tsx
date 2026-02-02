@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { loginUser } from "../features/auth/authSlice";
+import { fetchMe, loginUser } from "../features/auth/authSlice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -39,7 +39,12 @@ export default function Login() {
         />
 
         <button
-          onClick={() => dispatch(loginUser({ email, password }))}
+          onClick={
+            async() => {
+              await dispatch(loginUser({ email, password }));
+              await dispatch(fetchMe());
+            }
+          }
           className="bg-blue-600 text-white w-full p-2"
         >
           Login
