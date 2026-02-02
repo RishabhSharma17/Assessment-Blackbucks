@@ -7,3 +7,9 @@
     2. email: user@test.com, password:123456, role: USER,
     3. email: manager@test.com, password:123456, role: MANAGER,
 
+
+## Project Demo
+
+<a href="https://youtu.be/MdTdwJ94zCw">
+  <img src="https://img.youtube.com/vi/MdTdwJ94zCw/maxresdefault.jpg" width="700"/>
+</a>

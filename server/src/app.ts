@@ -11,7 +11,7 @@ import taskRouter from "./routes/task.routes";
 
 export const app = express();
 
-app.use(cors({ origin: 'https://assessment-blackbucks-ca4j-jged31i8g-rishabhsharma17s-projects.vercel.app', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
